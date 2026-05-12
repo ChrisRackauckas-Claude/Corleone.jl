@@ -112,7 +112,7 @@ function LuxCore.initialstates(rng::Random.AbstractRNG, multi::MultiExperimentLa
 
     st1 = exp_ps[1]
     F_init = zeros(eltype(exp_ps[1].F_init), np, np)
-    st1 = merge(st1, (; F_init = F_init, ))
+    st1 = merge(st1, (; F_init = F_init))
 
     new_sts = (st1, exp_ps[2:end]...)
 
@@ -133,7 +133,7 @@ function LuxCore.initialstates(rng::Random.AbstractRNG, multi::MultiExperimentLa
     int1 = exp1[1]
     F_init = zeros(eltype(int1.F_init), np, np)
     int1 = merge(int1, (; F_init = F_init))
-    st1 = merge(exp1, (; interval_1 = int1 ))
+    st1 = merge(exp1, (; interval_1 = int1))
 
     new_sts = (st1, exp_ps[2:end]...)
 
