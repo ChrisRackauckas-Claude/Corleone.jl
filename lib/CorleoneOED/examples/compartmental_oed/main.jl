@@ -128,10 +128,13 @@ optprob = OptimizationProblem(oed, DCriterion(); M = [6.0], integer_weights = tr
 
 using Juniper
 
-opt = OptimizationMOI.MOI.OptimizerWithAttributes(Juniper.Optimizer,
-    "nl_solver" => OptimizationMOI.MOI.OptimizerWithAttributes(Ipopt.Optimizer,
+opt = OptimizationMOI.MOI.OptimizerWithAttributes(
+    Juniper.Optimizer,
+    "nl_solver" => OptimizationMOI.MOI.OptimizerWithAttributes(
+        Ipopt.Optimizer,
         "print_level" => 0,
-))
+    )
+)
 
 sol = solve(optprob, opt)
 

@@ -76,7 +76,7 @@ shooting_points = [0.0, 3.0, 6.0, 9.0]
                     oed = shooting ? OEDLayer{discrete}(
                             prob, Tsit5(), shooting_points,
                             params = [2, 3],
-                            controls = fixed ? [] : (1 => control, ),
+                            controls = fixed ? [] : (1 => control,),
                             measurements = [
                                 ControlParameter(collect(tgrid1), controls = ones(length(tgrid1)), bounds = (0.0, 1.0)),
                                 ControlParameter(collect(tgrid2), controls = ones(length(tgrid2)), bounds = (0.0, 1.0)),
@@ -85,7 +85,7 @@ shooting_points = [0.0, 3.0, 6.0, 9.0]
                         ) : OEDLayer{discrete}(
                             prob, Tsit5(),
                             params = [2, 3],
-                            controls = fixed ? [] : (1 => control, ),
+                            controls = fixed ? [] : (1 => control,),
                             measurements = [
                                 ControlParameter(collect(tgrid1), controls = ones(length(tgrid1)), bounds = (0.0, 1.0)),
                                 ControlParameter(collect(tgrid2), controls = ones(length(tgrid2)), bounds = (0.0, 1.0)),
