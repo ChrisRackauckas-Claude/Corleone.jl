@@ -316,6 +316,16 @@ function get_integrality(layer::OEDLayer{<:Any, true, false, <:MultipleShootingL
     return int_u0
 end
 
+function get_integrality(layer::OEDLayer{false, true, <:Any, <:SingleShootingLayer}, integer::Bool, ps::ComponentArray, st)
+    int_u0 = Bool.(ps * 0)
+    !integer &&  return int_u0
+    subsets = CorleoneOED.__get_subsets(st.index_grid, layer.sampling_indices)
+    for subset in subsets
+        int_u0.controls[unique(subset)] .= true
+    end
+    return int_u0
+end
+
 function get_integrality(layer::OEDLayer{<:Any, true, <:Any, <:SingleShootingLayer}, integer::Bool, ps::ComponentArray, st)
     int_u0 = Bool.(ps * 0)
     !integer &&  return int_u0
@@ -394,7 +404,7 @@ function Optimization.OptimizationProblem(
 end
 
 function Optimization.OptimizationProblem(
-        layer::Union{OEDLayer{<:Any, true, true}, MultiExperimentLayer{<:Any, true}},
+        layer::Union{OEDLayer{<:Any, true, true, <:SingleShootingLayer}, MultiExperimentLayer{<:Any, true}},
         crit::CorleoneOED.AbstractCriterion;
         AD::Optimization.ADTypes.AbstractADType = AutoForwardDiff(),
         u0::ComponentVector = ComponentArray(first(LuxCore.setup(Random.default_rng(), layer))),
