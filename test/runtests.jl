@@ -14,6 +14,15 @@ const GROUP = get(ENV, "GROUP", "All")
 # default), "Core", and "QA" run the main-package suite below.
 const LIB_DIR = joinpath(@__DIR__, "..", "lib")
 
+# QA (Aqua) runs in an isolated environment (test/qa) so its tooling deps never
+# enter the main test target's resolve. On Julia < 1.11 the [sources] table is
+# ignored, so develop the package by path to test the PR branch code.
+function activate_qa_env()
+    Pkg.activate(joinpath(@__DIR__, "qa"))
+    Pkg.develop(Pkg.PackageSpec(path = joinpath(@__DIR__, "..")))
+    return Pkg.instantiate()
+end
+
 # Scan underscores right-to-left to find the longest matching sublibrary prefix,
 # returning (sublibrary, test_group) where test_group defaults to "Core".
 function _detect_sublibrary_group(group, lib_dir)
@@ -87,11 +96,8 @@ else
         end
 
         if GROUP == "All" || GROUP == "QA"
-            @safetestset "Code quality (Aqua.jl)" begin
-                using Aqua
-                using Corleone
-                Aqua.test_all(Corleone)
-            end
+            activate_qa_env()
+            @safetestset "Code quality (Aqua.jl)" include("qa/qa.jl")
         end
     end
 end
