@@ -21,6 +21,7 @@ jobs:
       matrix:
         group:
           - Core
+          - Examples
           - QA
         version:
           - 'lts'

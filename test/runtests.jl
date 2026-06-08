@@ -10,8 +10,10 @@ const GROUP = get(ENV, "GROUP", "All")
 # a sublibrary (e.g. local `GROUP=CorleoneOED julia test/runtests.jl`): the bare
 # sublibrary name selects that sublibrary's "Core" group and "<sublibrary>_<grp>"
 # selects a named group. We then activate the sublibrary's own test environment
-# and hand off to its runtests.jl via CORLEONE_TEST_GROUP. GROUP="All" (the local
-# default), "Core", and "QA" run the main-package suite below.
+# and hand off to its runtests.jl via CORLEONE_TEST_GROUP. Otherwise the
+# main-package suite below runs: GROUP="All" (the local default) and "Core" run
+# the light Core group; "Examples" and "QA" each activate their own dep-adding
+# test/<group> environment.
 const LIB_DIR = joinpath(@__DIR__, "..", "lib")
 
 # QA (Aqua) runs in an isolated environment (test/qa) so its tooling deps never
@@ -19,6 +21,16 @@ const LIB_DIR = joinpath(@__DIR__, "..", "lib")
 # ignored, so develop the package by path to test the PR branch code.
 function activate_qa_env()
     Pkg.activate(joinpath(@__DIR__, "qa"))
+    Pkg.develop(Pkg.PackageSpec(path = joinpath(@__DIR__, "..")))
+    return Pkg.instantiate()
+end
+
+# Examples (dep-adding group): the example scripts need the heavy optimal-control
+# stack (ModelingToolkit, Ipopt/OptimizationMOI, SciMLSensitivity), isolated in
+# test/examples so they never enter the main test target's resolve. On Julia
+# < 1.11 the [sources] table is ignored, so develop Corleone by path.
+function activate_examples_env()
+    Pkg.activate(joinpath(@__DIR__, "examples"))
     Pkg.develop(Pkg.PackageSpec(path = joinpath(@__DIR__, "..")))
     return Pkg.instantiate()
 end
@@ -75,13 +87,24 @@ if isdir(joinpath(LIB_DIR, _SUBLIB))
     end
 else
     @testset "Corleone.jl" begin
+        # Core: light tests that resolve in the main test target's environment.
+        # The default GROUP="All" runs only these no-extra-dep groups; the
+        # dep-adding groups below (Examples, QA) each activate their own
+        # isolated test/<group> environment and run only when selected.
         if GROUP == "All" || GROUP == "Core"
             @safetestset "Local controls" begin
-                include("local_controls.jl")
+                include("core/local_controls.jl")
             end
             @safetestset "Multiple shooting" begin
-                include("multiple_shooting.jl")
+                include("core/multiple_shooting.jl")
             end
+        end
+
+        # Examples: the optimal-control example scripts pull in the heavy
+        # MTK + Ipopt/MOI + SciMLSensitivity stack, isolated in test/examples
+        # so those deps never enter the light main test target's resolve.
+        if GROUP == "Examples"
+            activate_examples_env()
             @testset "Examples" begin
                 @safetestset "Lotka" begin
                     include("examples/lotka_oc.jl")
@@ -95,7 +118,7 @@ else
             end
         end
 
-        if GROUP == "All" || GROUP == "QA"
+        if GROUP == "QA"
             activate_qa_env()
             @safetestset "Code quality (Aqua.jl)" include("qa/qa.jl")
         end
