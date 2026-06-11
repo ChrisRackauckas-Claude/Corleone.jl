@@ -10,8 +10,8 @@ function activate_qa_env()
     Pkg.activate(joinpath(@__DIR__, "qa"))
     Pkg.develop(
         [
-        Pkg.PackageSpec(path = joinpath(@__DIR__, "..")),
-        Pkg.PackageSpec(path = joinpath(@__DIR__, "..", "..", ".."))
+            Pkg.PackageSpec(path = joinpath(@__DIR__, "..")),
+            Pkg.PackageSpec(path = joinpath(@__DIR__, "..", "..", ".."))
         ]
     )
     return Pkg.instantiate()
