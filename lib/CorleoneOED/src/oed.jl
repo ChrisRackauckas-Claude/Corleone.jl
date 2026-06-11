@@ -173,7 +173,7 @@ get_size_F(oed::OEDLayer{true, true, <:Any}) = begin
     if length(size_hxG) > 2
         size_hxG = size_hxG[1:2]
     end
-    return (size_hxG[2],size_hxG[2])
+    return (size_hxG[2], size_hxG[2])
 end
 get_size_F(oed::OEDLayer{false, true, true}) = begin
     sizeF = size(oed.observed.fisher.getters)
