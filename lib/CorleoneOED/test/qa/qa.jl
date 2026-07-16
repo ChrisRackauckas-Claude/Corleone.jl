@@ -2,6 +2,14 @@ using SciMLTesting
 using CorleoneOED
 using Test
 
+const DEPENDENCY_REEXPORTS = let
+    reexports = Set{Symbol}()
+    union!(reexports, public_api_names(CorleoneOED.Corleone))
+    union!(reexports, public_api_names(CorleoneOED.Symbolics))
+    push!(reexports, :Corleone, :Symbolics)
+    Tuple(sort!(collect(reexports)))
+end
+
 run_qa(
     CorleoneOED;
     explicit_imports = true,
@@ -26,5 +34,11 @@ run_qa(
                 :shooting_constraints, :shooting_constraints!, :variables,
             ),
         ),
+    ),
+    api_docs_kwargs = (;
+        rendered = true,
+        docs_src = normpath(@__DIR__, "..", "..", "..", "..", "docs", "src"),
+        ignore = DEPENDENCY_REEXPORTS,
+        rendered_ignore = DEPENDENCY_REEXPORTS,
     ),
 )
