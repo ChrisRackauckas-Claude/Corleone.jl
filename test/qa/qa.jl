@@ -26,4 +26,5 @@ run_qa(
             ),
         ),
     ),
+    api_docs_kwargs = (; rendered = true),
 )

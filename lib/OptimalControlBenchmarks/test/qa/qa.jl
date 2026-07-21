@@ -14,4 +14,8 @@ run_qa(
         # `inputs` is re-exported by ModelingToolkit from ModelingToolkitBase.
         all_explicit_imports_via_owners = (; ignore = (:inputs,)),
     ),
+    api_docs_kwargs = (;
+        rendered = true,
+        docs_src = normpath(@__DIR__, "..", "..", "..", "..", "docs", "src"),
+    ),
 )
