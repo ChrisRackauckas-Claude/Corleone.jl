@@ -131,9 +131,33 @@ function SingleShootingLayer(
     )
 end
 
+"""
+    get_problem(layer::SingleShootingLayer)
+
+Return the differential-equation problem integrated by `layer`.
+"""
 get_problem(layer::SingleShootingLayer) = layer.problem
+
+"""
+    get_controls(layer::SingleShootingLayer)
+
+Return `(controls, control_indices)`, where `controls` are the control parameter
+objects and `control_indices` identify their positions in the problem parameter vector.
+"""
 get_controls(layer::SingleShootingLayer) = (layer.controls, layer.control_indices)
+
+"""
+    get_tspan(layer::SingleShootingLayer)
+
+Return the time span of the underlying differential-equation problem.
+"""
 get_tspan(layer::SingleShootingLayer) = layer.problem.tspan
+
+"""
+    get_tunable(layer::SingleShootingLayer)
+
+Return the indices of tunable initial-condition entries.
+"""
 get_tunable(layer::SingleShootingLayer) = layer.tunable_ic
 function get_params(layer::SingleShootingLayer)
     return setdiff(eachindex(layer.problem.p), layer.control_indices)

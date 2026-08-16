@@ -29,6 +29,9 @@ else
             @safetestset "Local controls" begin
                 include("core/local_controls.jl")
             end
+            @safetestset "Generic layer interface" begin
+                include("core/interface_contracts.jl")
+            end
             return @safetestset "Multiple shooting" begin
                 include("core/multiple_shooting.jl")
             end

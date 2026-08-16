@@ -23,8 +23,21 @@ mythreadmap(::EnsembleSerial, args...) = map(args...)
 mythreadmap(::EnsembleThreads, args...) = tmap(args...)
 mythreadmap(::EnsembleDistributed, args...) = pmap(args...)
 
-# General methods for Corleone Layer
+"""
+    get_block_structure(layer; kwargs...)
+
+Return cumulative parameter boundaries for a Corleone layer. The first entry is
+zero and the final entry is the number of optimization parameters. Layer wrappers
+should extend this method when their parameter blocks have additional structure.
+"""
 get_block_structure(layer::LuxCore.AbstractLuxLayer; kwargs...) = [0, LuxCore.parameterlength(layer)]
+
+"""
+    get_bounds(layer; kwargs...)
+
+Return lower and upper bounds for the optimization variables of `layer` as a tuple
+`(lower, upper)`. A layer extension must preserve the same structure in both values.
+"""
 get_bounds(layer::LuxCore.AbstractLuxLayer; kwargs...) = (
     get_lower_bound(layer), get_upper_bound(layer),
 )
