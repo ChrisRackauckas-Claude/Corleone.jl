@@ -63,9 +63,5 @@ run_qa(
             ),
         ),
     ),
-    # CorleoneOED is documented by Corleone's shared repository manual.
-    api_docs_kwargs = (;
-        docs_src = normpath(@__DIR__, "..", "..", "..", "..", "docs", "src"),
-    ),
     reexports_allow = (CORLEONE_REEXPORTS..., SYMBOLICS_REEXPORTS...),
 )
