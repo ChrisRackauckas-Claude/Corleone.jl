@@ -50,6 +50,12 @@ function ControlParameter(t::AbstractVector; name::Symbol = gensym(:w), controls
     return ControlParameter{typeof(t), typeof(controls), typeof(bounds)}(name, t, controls, bounds)
 end
 
+"""
+    get_timegrid(parameters::ControlParameter, tspan = (-Inf, Inf))
+
+Return the control time points inside `tspan`. The returned points retain the order
+of the control parameter grid and exclude the right endpoint of a finite interval.
+"""
 get_timegrid(parameters::ControlParameter, tspan = (-Inf, Inf)) = begin
     (; t) = parameters
     idx = isnothing(tspan) ? eachindex(t) : findall(tspan[1] .<= t .< tspan[2])

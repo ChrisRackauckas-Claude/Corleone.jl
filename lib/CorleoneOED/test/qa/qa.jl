@@ -39,11 +39,6 @@ const SYMBOLICS_REEXPORTS = (
     :sympy_to_symbolics, :taylor, :taylor_coeff, :term, :terms, :tosymbol, :unwrap_const,
     :vartype, Symbol("≲"), Symbol("≳"),
 )
-const SYMBOLICS_UNDOCUMENTED_REEXPORTS = (
-    Symbol("@symbolic_wrap"), Symbol("@wrapped"), :RuleSet, :get_canonical_expr,
-    :infimum, :is_derivative, :istree, :solve_for, :supremum,
-)
-
 run_qa(
     CorleoneOED;
     # CorleoneOED pulls Corleone and its other deps in with bare `using`, so it
@@ -68,10 +63,9 @@ run_qa(
             ),
         ),
     ),
+    # CorleoneOED is documented by Corleone's shared repository manual.
     api_docs_kwargs = (;
         docs_src = normpath(@__DIR__, "..", "..", "..", "..", "docs", "src"),
-        ignore = SYMBOLICS_UNDOCUMENTED_REEXPORTS,
-        rendered_ignore = SYMBOLICS_REEXPORTS,
     ),
     reexports_allow = (CORLEONE_REEXPORTS..., SYMBOLICS_REEXPORTS...),
 )
