@@ -29,6 +29,9 @@ else
             @safetestset "Local controls" begin
                 include("core/local_controls.jl")
             end
+            @safetestset "Precompile workload" begin
+                include("core/precompile_workload.jl")
+            end
             @safetestset "Generic layer interface" begin
                 include("core/interface_contracts.jl")
             end

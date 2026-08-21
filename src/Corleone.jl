@@ -2,6 +2,7 @@ module Corleone
 
 using Reexport
 using DocStringExtensions
+import PrecompileTools: @compile_workload, @setup_workload
 using Random
 
 using RecursiveArrayTools
@@ -68,5 +69,23 @@ abstract type AbstractCorleoneFunctionWrapper end
 
 include("dynprob.jl")
 export CorleoneDynamicOptProblem
+
+@setup_workload begin
+    @compile_workload begin
+        rng = Random.MersenneTwister(1)
+        controls = ControlParameter(
+            collect(0.0:0.25:0.75);
+            name = :u,
+            controls = [0.1, 0.2, 0.3, 0.4],
+            bounds = (0.0, 1.0),
+        )
+        get_timegrid(controls, (0.0, 0.75))
+        control_length(controls)
+        get_controls(rng, controls)
+        get_bounds(controls)
+        check_consistency(rng, controls)
+        build_index_grid(controls; tspan = (0.0, 0.75))
+    end
+end
 
 end
