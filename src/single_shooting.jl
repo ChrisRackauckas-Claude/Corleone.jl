@@ -251,10 +251,10 @@ function retrieve_symbol_cache(::Nothing, u0, p, control_indices; control_names 
     p_id = 0
     parameter_symbols = [
         if i ∈ control_indices
-                u_id += 1
-                control_names[u_id]
+            u_id += 1
+            control_names[u_id]
         else
-                Symbol(:p, _subscript(p_id += 1))
+            Symbol(:p, _subscript(p_id += 1))
         end for i in eachindex(p0)
     ]
     tsym = [:t]
