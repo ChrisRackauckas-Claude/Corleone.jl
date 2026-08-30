@@ -140,10 +140,10 @@ end
         @test all(
             [
                 isapprox(
-                        sol_at_shooting_points.u[i],
-                        getproperty(ps, Symbol("interval_$i")).u0;
-                        atol = 1.0e-5,
-                    ) for i in 2:4
+                    sol_at_shooting_points.u[i],
+                    getproperty(ps, Symbol("interval_$i")).u0;
+                    atol = 1.0e-5,
+                ) for i in 2:4
             ]
         )
         trajectory, _ = layer(nothing, ps, st)
