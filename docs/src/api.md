@@ -55,18 +55,18 @@ CorleoneOED.FisherECriterion
 CorleoneOED.FisherDCriterion
 ```
 
-### Symbolics re-exports
+### SymbolicUtils-owned names re-exported via Symbolics
 
-`CorleoneOED` builds its facade with `@reexport using Symbolics`, so names
-exported by [Symbolics.jl](https://docs.sciml.ai/Symbolics/stable/) are also
-reachable after `using CorleoneOED`. The following Symbolics-owned names are
-part of that public re-export surface; CorleoneOED does not define them.
-Consult the Symbolics documentation for their behaviour:
+`CorleoneOED` builds its facade with `@reexport using Symbolics`. The following
+names are owned by SymbolicUtils and only reach CorleoneOED because Symbolics
+re-exports them; CorleoneOED does not define them.
 
-- `Unknown`
-- `scalarize`
-- `shape`
-- `unwrap`
+```@docs
+SymbolicUtils.Unknown
+SymbolicUtils.shape
+SymbolicUtils.scalarize
+SymbolicUtils.unwrap
+```
 
 ## OptimalControlBenchmarks
 

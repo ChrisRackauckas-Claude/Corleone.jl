@@ -38,8 +38,7 @@ const SYMBOLICS_REEXPORTS = (
     :sympy_pythoncall_simplify, :sympy_pythoncall_to_symbolics, :sympy_simplify,
     :sympy_to_symbolics, :taylor, :taylor_coeff, :term, :terms, :tosymbol, :unwrap_const,
     :vartype, Symbol("≲"), Symbol("≳"),
-    # Kept as part of the `@reexport using Symbolics` facade and documented
-    # under CorleoneOED's Symbolics re-exports in docs/src/api.md (see #150).
+    # SymbolicUtils-owned names re-exported via Symbolics; documented in docs/src/api.md.
     :Unknown, :scalarize, :shape, :unwrap,
 )
 run_qa(

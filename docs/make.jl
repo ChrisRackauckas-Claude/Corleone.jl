@@ -10,13 +10,12 @@ Pkg.develop(
     ]
 )
 
-using Documenter, Corleone, CorleoneOED, OptimalControlBenchmarks
+using Documenter, Corleone, CorleoneOED, OptimalControlBenchmarks, SymbolicUtils
 using DocumenterInterLinks
 using DocumenterCitations
 using Literate
 using Dates
 using YAML, JSON
-
 
 # Include the interlinks
 include("interlinks.jl")
@@ -25,10 +24,33 @@ include("process_tutorials.jl")
 # Include the bibliography
 bib = CitationBibliography(joinpath(@__DIR__, "src", "assets", "bibliography.bib"))
 
+# Documenter walks every docstring in `modules` for doctests. Keep only the four
+# SymbolicUtils bindings we surface in api.md so Corleone's docs do not run the
+# rest of SymbolicUtils's doctest suite.
+const _SYMBOLICUTILS_DOC_NAMES = (:Unknown, :shape, :scalarize, :unwrap)
+let meta = Docs.meta(SymbolicUtils)
+    for binding in collect(keys(meta))
+        binding.var in _SYMBOLICUTILS_DOC_NAMES || delete!(meta, binding)
+    end
+end
+
+# checkdocs_ignored_modules only skips these modules when discovered as
+# submodules; SymbolicUtils itself stays in `modules` so `@docs` can resolve
+# the four bindings above. Ignore SymbolicUtils's own submodules so checkdocs
+# does not demand their docstrings in this manual.
+const _SYMBOLICUTILS_CHECKDOCS_IGNORE = Module[
+    getfield(SymbolicUtils, name)
+        for name in names(SymbolicUtils; all = true)
+        if Base.isidentifier(name) &&
+        isdefined(SymbolicUtils, name) &&
+        getfield(SymbolicUtils, name) isa Module &&
+        parentmodule(getfield(SymbolicUtils, name)) === SymbolicUtils
+]
+
 makedocs(
     sitename = "Corleone.jl",
     authors = "Carl Julius Martensen, Christoph Plate, et al.",
-    modules = [Corleone, CorleoneOED, OptimalControlBenchmarks],
+    modules = [Corleone, CorleoneOED, OptimalControlBenchmarks, SymbolicUtils],
     format = Documenter.HTML(
         assets = ["assets/favicon.ico"],
         canonical = "https://docs.sciml.ai/Corleone/stable/",
@@ -36,6 +58,7 @@ makedocs(
     ),
     doctest = true,
     checkdocs = :exports,
+    checkdocs_ignored_modules = _SYMBOLICUTILS_CHECKDOCS_IGNORE,
     linkcheck = true,
     #DocumenterVitepress.MarkdownVitepress(
     #    repo = "github.com/SciML/Corleone.jl",
