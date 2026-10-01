@@ -61,12 +61,10 @@ CorleoneOED.FisherDCriterion
 names are owned by SymbolicUtils and only reach CorleoneOED because Symbolics
 re-exports them; CorleoneOED does not define them.
 
-```@docs
-SymbolicUtils.Unknown
-SymbolicUtils.shape
-SymbolicUtils.scalarize
-SymbolicUtils.unwrap
-```
+- [`SymbolicUtils.Unknown`](@extref)
+- [`SymbolicUtils.shape`](@extref)
+- `scalarize`
+- `unwrap`
 
 ## OptimalControlBenchmarks
 
