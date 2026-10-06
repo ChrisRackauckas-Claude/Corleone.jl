@@ -1,6 +1,0 @@
-Output of checks/grid20.jl 2.0 0.5 0.25 on 2026-10-05 (20 control intervals, start (0.3,0)):
-CHECK μ=2.0 converged=true rounds=78 Φ=6.0464 ∫u_B=0.333 b(T)=0.289 p(T)=0.326
-CHECK μ=0.5 converged=true rounds=60 Φ=3.9698 ∫u_B=0.5 b(T)=0.5 p(T)=0.572
-CHECK μ=0.25 converged=false rounds=300 Φ=4.004 ∫u_B=0.625 b(T)=0.526 p(T)=0.645
-Python prototype (scratch, 20 intervals, L-BFGS-B best responses, damping 0.5):
-μ=0: Φ=1.9626 b(T)=1.039 p(T)=1.249; μ=0.1: Φ=2.9950; μ=0.5: Φ=3.9703; μ=2: Φ=6.1229
