@@ -3,24 +3,24 @@
 using CorleoneGame
 
 const enabled = [
-    :algae, 
+    :algae,
     :antColonies,
-    :avoidance, 
+    :avoidance,
     :biofilm,
-    :ciliate, 
-    :fishery, 
-    :foraging, 
-    :metabolicPathway, 
-    :microbial, 
-    :mitochondria, 
-    :motor, 
-    :neural, 
-    :phage, 
-    :plantNitrogen, 
+    :ciliate,
+    :fishery,
+    :foraging,
+    :metabolicPathway,
+    :microbial,
+    :mitochondria,
+    :motor,
+    :neural,
+    :phage,
+    :plantNitrogen,
     :plantWater,
     :pollination,
     :predatorPrey,
-    :proteinFolding, 
+    :proteinFolding,
     :sexRatio,
     :tupelo,
     :batchFermentation,
@@ -31,53 +31,53 @@ const enabled = [
 ]
 
 const periodic = [
-    :algae, 
-    :ciliate, 
-    :fishery, 
-    :metabolicPathway, 
-    :microbial, 
-    :mitochondria, 
-    :neural, 
+    :algae,
+    :ciliate,
+    :fishery,
+    :metabolicPathway,
+    :microbial,
+    :mitochondria,
+    :neural,
     :predatorPrey,
 ]
 
 const modules = Dict(
-    :woundRepair=>:WoundRepair,
-    :immuneClearance=>:ImmuneClearance,
-    :seedGermination=>:SeedGermination,
-    :batchFermentation=>:BatchFermentation,
-    :circadianCycle=>:CircadianCycle,
+    :woundRepair => :WoundRepair,
+    :immuneClearance => :ImmuneClearance,
+    :seedGermination => :SeedGermination,
+    :batchFermentation => :BatchFermentation,
+    :circadianCycle => :CircadianCycle,
 
-    :algae=>:Algae, 
-    :antColonies=>:AntColonies,
-    :avoidance=>:Avoidance, 
-    :biofilm=>:Biofilm,
-    :ciliate=>:Ciliate,
-    :fishery=>:Fishery,
-    :foraging=>:Foraging, 
-    :microbial=>:Microbial, 
-    :mitochondria=>:Mitochondria,
-    :motor=>:Motor, 
-    :metabolicPathway=>:MetabolicPathway, 
-    :plantNitrogen=>:PlantNitrogen, 
-    :plantWater=>:PlantWater,
-    :pollination=>:Pollination,
-    :predatorPrey=>:PredatorPrey,
-    :neural=>:Neural, 
-    :phage=>:Phage, 
-    :proteinFolding=>:ProteinFolding, 
-    :sexRatio=>:SexRatio,
-    :tupelo=>:Tupelo,
+    :algae => :Algae,
+    :antColonies => :AntColonies,
+    :avoidance => :Avoidance,
+    :biofilm => :Biofilm,
+    :ciliate => :Ciliate,
+    :fishery => :Fishery,
+    :foraging => :Foraging,
+    :microbial => :Microbial,
+    :mitochondria => :Mitochondria,
+    :motor => :Motor,
+    :metabolicPathway => :MetabolicPathway,
+    :plantNitrogen => :PlantNitrogen,
+    :plantWater => :PlantWater,
+    :pollination => :Pollination,
+    :predatorPrey => :PredatorPrey,
+    :neural => :Neural,
+    :phage => :Phage,
+    :proteinFolding => :ProteinFolding,
+    :sexRatio => :SexRatio,
+    :tupelo => :Tupelo,
 )
 
 mode = isempty(ARGS) ? "single" : only(ARGS)
-mode in ("single","multiple") || error("Usage: plot_library.jl [single|multiple]")
+mode in ("single", "multiple") || error("Usage: plot_library.jl [single|multiple]")
 
 for name in enabled
     file = joinpath(@__DIR__, "..", "library", String(name), "$(name).jl")
     include(file)
     mod = getfield(Main, modules[name])
-    folder = joinpath(dirname(file),mode=="single" ? "output" : "output_multiple")
-    CorleoneGame.replot_outputs(mod.game();folder)
+    folder = joinpath(dirname(file), mode == "single" ? "output" : "output_multiple")
+    CorleoneGame.replot_outputs(mod.game(); folder)
     GC.gc(true)
 end

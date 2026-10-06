@@ -8,23 +8,25 @@
 using CorleoneGame
 isdefined(@__MODULE__, :Tupelo) || include(joinpath(@__DIR__, "tupelo.jl"))
 module TupeloAllowance
-using CorleoneGame
-using ..Tupelo
+    using CorleoneGame
+    using ..Tupelo
 
-parameters() = Tupelo.Parameters(; b=0.55, muE=0.025, muH=0.10, dE=0.05, dH=1.2, kappa=0.65,
-    p_decay=0.20, q_decay=0.06, w_A=(1/1.23, 0.08/1.23, 0.15/1.23, 0.0),
-    w_B=(1/1.025, 0.025/1.025, 0.0), U_A=2.0, U_B=3.5, C_A=1.0,
-    saturation=true, photoperiod=false)
+    parameters() = Tupelo.Parameters(;
+        b = 0.55, muE = 0.025, muH = 0.1, dE = 0.05, dH = 1.2, kappa = 0.65,
+        p_decay = 0.2, q_decay = 0.06, w_A = (1 / 1.23, 0.08 / 1.23, 0.15 / 1.23, 0.0),
+        w_B = (1 / 1.025, 0.025 / 1.025, 0.0), U_A = 2.0, U_B = 3.5, C_A = 1.0,
+        saturation = true, photoperiod = false
+    )
 
-function main(; folder=joinpath(@__DIR__, "output_allowance"))
-    mkpath(folder)
-    # Reuse the reference observations so that forward.png compares this
-    # candidate with the synthetic data generated from the reference instance.
-    observations = joinpath(@__DIR__, "output", "tupelo_synthetic.csv")
-    isfile(observations) && cp(observations, joinpath(folder, "tupelo_synthetic.csv"); force=true)
-    options = Tupelo.algorithm_options(; damping=0.5)  # setting of the earlier reference record
-    return run_game(Tupelo.game(parameters()); options, folder)
-end
+    function main(; folder = joinpath(@__DIR__, "output_allowance"))
+        mkpath(folder)
+        # Reuse the reference observations so that forward.png compares this
+        # candidate with the synthetic data generated from the reference instance.
+        observations = joinpath(@__DIR__, "output", "tupelo_synthetic.csv")
+        isfile(observations) && cp(observations, joinpath(folder, "tupelo_synthetic.csv"); force = true)
+        options = Tupelo.algorithm_options(; damping = 0.5)  # setting of the earlier reference record
+        return run_game(Tupelo.game(parameters()); options, folder)
+    end
 end
 
 if abspath(PROGRAM_FILE) == @__FILE__

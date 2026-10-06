@@ -4,7 +4,7 @@ using CorleoneGame, Test
 
 const LIBRARY = normpath(joinpath(@__DIR__, "..", "..", "library"))
 
-cases = Dict{String,Module}()
+cases = Dict{String, Module}()
 for name in sort(readdir(LIBRARY))
     path = joinpath(LIBRARY, name, name * ".jl")
     isfile(path) || continue
@@ -16,7 +16,7 @@ end
 
 @testset "Library case definitions" begin
     @test length(cases) == 25
-    for (name, mod) in sort(collect(cases); by=first)
+    for (name, mod) in sort(collect(cases); by = first)
         @testset "$name" begin
             g = mod.game()
             o = mod.algorithm_options()
@@ -26,7 +26,7 @@ end
             @test length(g.control_labels) == length(g.owners)
             source = read(joinpath(LIBRARY, name, name * ".jl"), String)
             @test occursin(r"^# Category: (seasonal|periodical|episodical)[,\n]", source)
-            tr = simulate(g, initial_controls(g, o.intervals); samples=2)
+            tr = simulate(g, initial_controls(g, o.intervals); samples = 2)
             @test all(isfinite, tr.objectives)
         end
     end
