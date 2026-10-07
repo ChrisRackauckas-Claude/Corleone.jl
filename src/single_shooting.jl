@@ -403,6 +403,10 @@ end
 
 sequential_solve(args...) = _sequential_solve(args...)
 
+# Under ReverseDiff >= 1.17.2 the stored state is a `TrackedArray` (controls are tracked views),
+# and slicing it would hand the next in-place solve a `TrackedArray`; copy element-wise instead.
+_carry_state(u0, x) = map(i -> x[i], eachindex(u0))
+
 @generated function _sequential_solve(
         problem, alg, u0, param, ps, indexgrids::NTuple{N}, tspans::NTuple{N, Tuple}, sys
     ) where {N}
@@ -425,7 +429,7 @@ sequential_solve(args...) = _sequential_solve(args...)
         if i < N
             push!(u_ret_expr.args, :($(solutions[i]).u[1:(end - 1)]))
             push!(t_ret_expr.args, :($(solutions[i]).t[1:(end - 1)]))
-            push!(ex, :($(u0s[i + 1]) = last($(solutions[i]).u)[eachindex(u0)]))
+            push!(ex, :($(u0s[i + 1]) = _carry_state(u0, last($(solutions[i]).u))))
         else
             push!(u_ret_expr.args, :($(solutions[i]).u))
             push!(t_ret_expr.args, :($(solutions[i]).t))
