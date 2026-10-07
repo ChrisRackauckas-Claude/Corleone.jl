@@ -24,11 +24,13 @@ ComponentArrays = "b0b7db55-cfe3-40fc-9ded-d10e2dbeff66"
 Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
 ModelingToolkit = "961ee093-0014-501f-94e3-6117800e7a78"
 Optimization = "7f7a1694-90dd-40f0-9382-eb1efda571ba"
+ReverseDiff = "37e2e3b7-166d-5795-8a7a-e32c996b4267"
 
 [extensions]
 CorleoneMakieExtension = "Makie"
 CorleoneComponentArraysExtension = ["ComponentArrays"]
 CorleoneModelingToolkitExtension = "ModelingToolkit"
+CorleoneReverseDiffExtension = "ReverseDiff"
 
 [compat]
 ChainRulesCore = "1.25.1"
@@ -48,7 +50,9 @@ Pkg = "1"
 Random = "1"
 RecursiveArrayTools = "4"
 Reexport = "1.2.2"
+ReverseDiff = "1"
 SafeTestsets = "0.1"
+StaticArrays = "1"
 StableRNGs = "1"
 SciMLBase = "3"
 SciMLStructures = "1.7"
@@ -62,10 +66,12 @@ ComponentArrays = "b0b7db55-cfe3-40fc-9ded-d10e2dbeff66"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 OrdinaryDiffEqTsit5 = "b1df2697-797e-41e3-8120-5422d3b24e4a"
 Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+ReverseDiff = "37e2e3b7-166d-5795-8a7a-e32c996b4267"
 SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
 SciMLTesting = "09d9d899-5365-40a9-917a-5f67fddea283"
 StableRNGs = "860ef19b-820b-49d6-a774-d7a799459cd3"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["ComponentArrays", "Test", "OrdinaryDiffEqTsit5", "LinearAlgebra", "SafeTestsets", "SciMLTesting", "Pkg", "StableRNGs"]
+test = ["ComponentArrays", "Test", "OrdinaryDiffEqTsit5", "LinearAlgebra", "SafeTestsets", "SciMLTesting", "Pkg", "StableRNGs", "ReverseDiff", "StaticArrays"]
