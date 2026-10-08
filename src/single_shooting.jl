@@ -403,12 +403,19 @@ end
 
 sequential_solve(args...) = _sequential_solve(args...)
 
-_carry_state(u0, x) = _untrack_container(x[eachindex(u0)])
-
-# Under ReverseDiff >= 1.17.2 the sliced state is a `TrackedArray` (the controls are tracked
-# views), which an in-place solve cannot write into; the ReverseDiff extension turns it back
-# into an array of tracked scalars. Every other container is passed through unchanged.
-_untrack_container(x) = x
+# Slicing can return a different container than `u0`: under ReverseDiff >= 1.17.2 the slice is a
+# `TrackedArray` (the controls are tracked views), which an in-place solve cannot write into.
+# For mutable `u0`, copy the elements into a container like `u0` instead; immutable containers
+# (e.g. `SVector`, `SizedVector`) keep the slice unchanged.
+function _carry_state(u0, x)
+    y = x[eachindex(u0)]
+    (y isa typeof(u0) || !ismutable(u0)) && return y
+    z = similar(u0, eltype(y))
+    for (i, j) in zip(eachindex(z), eachindex(y))
+        z[i] = y[j]
+    end
+    return z
+end
 
 @generated function _sequential_solve(
         problem, alg, u0, param, ps, indexgrids::NTuple{N}, tspans::NTuple{N, Tuple}, sys

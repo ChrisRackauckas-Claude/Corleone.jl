@@ -9,6 +9,18 @@ control_grid() = ControlParameter(
     collect(0:(N_INTERVALS - 1)) .* DT; controls = fill(0.2, N_INTERVALS), name = :rate
 )
 
+@testset "Carried state keeps the container type of u0" begin
+    x = [1.0, 2.0, 0.2]
+    for u0 in (SizedVector{2}([0.0, 0.0]), MVector(0.0, 0.0), [0.0, 0.0])
+        y = Corleone._carry_state(u0, x)
+        @test y isa typeof(u0)
+        @test y == [1.0, 2.0]
+    end
+    tracked = Corleone._carry_state([0.0, 0.0], ReverseDiff.track(x))
+    @test tracked isa Vector
+    @test length(tracked) == 2
+end
+
 @testset "Out-of-place SizedVector state keeps its container across segments" begin
     rhs(u, p, t) = SizedVector{2}([p[1] * u[1], -p[1] * u[2]])
     u0 = SizedVector{2}([1.0, 2.0])
